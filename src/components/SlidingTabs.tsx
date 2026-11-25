@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import type { CategoryDef, CategoryId } from '../types/motion';
 import './SlidingTabs.css';
 
@@ -9,9 +9,15 @@ interface SlidingTabsProps {
 }
 
 export function SlidingTabs({ categories, activeId, onChange }: SlidingTabsProps) {
-  const wrapRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const buttonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [indicator, setIndicator] = useState({ left: 0, width: 0, ready: false });
+  const [indicator, setIndicator] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    ready: false,
+  });
 
   useLayoutEffect(() => {
     const updatePosition = () => {
@@ -19,7 +25,9 @@ export function SlidingTabs({ categories, activeId, onChange }: SlidingTabsProps
       if (!btn) return;
       setIndicator({
         left: btn.offsetLeft,
+        top: btn.offsetTop,
         width: btn.offsetWidth,
+        height: btn.offsetHeight,
         ready: true,
       });
     };
@@ -28,29 +36,37 @@ export function SlidingTabs({ categories, activeId, onChange }: SlidingTabsProps
     if (document.fonts?.ready) {
       document.fonts.ready.then(updatePosition);
     }
+
+    const observer =
+      typeof ResizeObserver !== 'undefined' && listRef.current
+        ? new ResizeObserver(updatePosition)
+        : null;
+    if (observer && listRef.current) {
+      observer.observe(listRef.current);
+    }
+
     window.addEventListener('resize', updatePosition);
-    return () => window.removeEventListener('resize', updatePosition);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', updatePosition);
+    };
   }, [activeId, categories]);
 
-  useEffect(() => {
-    const wrap = wrapRef.current;
-    const btn = buttonRefs.current[activeId];
-    if (!wrap || !btn) return;
-    if (wrap.scrollWidth <= wrap.clientWidth) return;
-
-    const targetScroll = btn.offsetLeft - wrap.clientWidth / 2 + btn.offsetWidth / 2;
-    wrap.scrollTo({ left: Math.max(0, targetScroll), behavior: 'smooth' });
-  }, [activeId]);
-
   return (
-    <div className="sliding-tabs-wrap" ref={wrapRef}>
-      <div className="sliding-tabs" role="tablist" aria-label="動きのカテゴリー">
+    <div className="sliding-tabs-wrap">
+      <div
+        className="sliding-tabs"
+        ref={listRef}
+        role="tablist"
+        aria-label="動きのカテゴリー"
+      >
         {indicator.ready && (
           <div
             className="sliding-tabs__indicator"
             style={{
-              transform: `translateX(${indicator.left}px)`,
+              transform: `translate3d(${indicator.left}px, ${indicator.top}px, 0)`,
               width: `${indicator.width}px`,
+              height: `${indicator.height}px`,
             }}
             aria-hidden="true"
           />

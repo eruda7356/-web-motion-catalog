@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { X } from 'lucide-react';
 import { GLOSSARY_TERMS } from '../data/glossary';
 import type { GlossaryTermId } from '../types/motion';
@@ -17,6 +17,9 @@ export function SiteAnatomyModal({
   onSelectTerm,
   onClose,
 }: SiteAnatomyModalProps) {
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [flashTick, setFlashTick] = useState(0);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,10 +29,29 @@ export function SiteAnatomyModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Scroll modal body smoothly to top & trigger subtle highlight flash whenever modal opens or term changes
+  useEffect(() => {
+    if (!isOpen) return;
+    setFlashTick((t) => t + 1);
+    const bodyEl = bodyRef.current;
+    if (bodyEl && bodyEl.scrollTop > 0) {
+      bodyEl.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [isOpen, activeTermId]);
+
   if (!isOpen) return null;
 
   const activeTerm =
     GLOSSARY_TERMS.find((t) => t.id === activeTermId) ?? GLOSSARY_TERMS[0];
+
+  const handleSelect = (termId: GlossaryTermId) => {
+    if (termId === activeTermId) {
+      setFlashTick((t) => t + 1);
+      bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      onSelectTerm(termId);
+    }
+  };
 
   const isHighlighted = (id: GlossaryTermId) => activeTermId === id;
 
@@ -38,6 +60,12 @@ export function SiteAnatomyModal({
 
   const partStroke = (id: GlossaryTermId, base = 'transparent') =>
     isHighlighted(id) ? '#5B7B62' : base;
+
+  const partProps = (id: GlossaryTermId) => ({
+    key: isHighlighted(id) ? `${id}-${flashTick}` : id,
+    className: `anatomy-svg__part ${isHighlighted(id) ? 'anatomy-svg__part--flash' : ''}`,
+    onClick: () => handleSelect(id),
+  });
 
   return (
     <div
@@ -67,7 +95,7 @@ export function SiteAnatomyModal({
           </button>
         </div>
 
-        <div className="anatomy-modal__body">
+        <div className="anatomy-modal__body" ref={bodyRef}>
           {/* Left / Top: Interactive Natural-living Mini-site SVG */}
           <div className="anatomy-diagram">
             <svg
@@ -94,10 +122,7 @@ export function SiteAnatomyModal({
               />
 
               {/* Top Page / Subpage Tabs */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('pages')}
-              >
+              <g {...partProps('pages')}>
                 <rect
                   x="16"
                   y="16"
@@ -106,7 +131,7 @@ export function SiteAnatomyModal({
                   rx="7"
                   fill={partFill('pages', '#EFEAE0')}
                   stroke={partStroke('pages')}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 <text x="60" y="29" textAnchor="middle" fontSize="8.5" fontWeight="600" fill="#463E36">
                   トップページ
@@ -119,7 +144,7 @@ export function SiteAnatomyModal({
                   rx="7"
                   fill={partFill('pages', '#F7F4ED')}
                   stroke={partStroke('pages')}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 <text x="146" y="29" textAnchor="middle" fontSize="8.5" fill="#786E63">
                   下層ページ
@@ -127,10 +152,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Loading / Opening badge */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('loading')}
-              >
+              <g {...partProps('loading')}>
                 <rect
                   x="190"
                   y="16"
@@ -139,7 +161,7 @@ export function SiteAnatomyModal({
                   rx="10"
                   fill={isHighlighted('loading') ? '#F5DFD1' : '#F8ECE3'}
                   stroke={isHighlighted('loading') ? '#C87852' : 'transparent'}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 <text x="219" y="29" textAnchor="middle" fontSize="8" fontWeight="600" fill="#A65E3B">
                   導入演出
@@ -147,10 +169,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Header */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('header')}
-              >
+              <g {...partProps('header')}>
                 <rect
                   x="16"
                   y="42"
@@ -159,7 +178,7 @@ export function SiteAnatomyModal({
                   rx="9"
                   fill={partFill('header', '#F5F0E6')}
                   stroke={partStroke('header')}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 {/* Leaf emblem */}
                 <circle cx="30" cy="57" r="7" fill="#E3EDE4" />
@@ -170,10 +189,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Nav / Menu inside Header */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('nav')}
-              >
+              <g {...partProps('nav')}>
                 <rect
                   x="128"
                   y="47"
@@ -182,7 +198,7 @@ export function SiteAnatomyModal({
                   rx="6"
                   fill={partFill('nav', '#FFFDF9')}
                   stroke={partStroke('nav', 'rgba(56, 49, 42, 0.06)')}
-                  strokeWidth="1.6"
+                  strokeWidth="1.8"
                 />
                 <text x="151" y="60" textAnchor="middle" fontSize="8" fill="#5D544B">
                   お店のこと
@@ -199,10 +215,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Top View / Hero */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('hero')}
-              >
+              <g {...partProps('hero')}>
                 <g clipPath="url(#anatomy-hero-clip)">
                   <rect
                     x="16"
@@ -234,7 +247,7 @@ export function SiteAnatomyModal({
                   rx="12"
                   fill="none"
                   stroke={partStroke('hero')}
-                  strokeWidth="2"
+                  strokeWidth="2.2"
                 />
                 <text x="32" y="107" fontSize="11.5" fontWeight="700" fill="#38312A">
                   季節と暮らす家
@@ -245,10 +258,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* CTA Button inside Hero */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('button')}
-              >
+              <g {...partProps('button')}>
                 <rect
                   x="30"
                   y="136"
@@ -256,7 +266,7 @@ export function SiteAnatomyModal({
                   height="25"
                   rx="12.5"
                   fill={isHighlighted('button') ? '#C87852' : '#5B7B62'}
-                  stroke={isHighlighted('button') ? '#FFFDF9' : 'transparent'}
+                  stroke={isHighlighted('button') ? '#5B7B62' : 'transparent'}
                   strokeWidth="2"
                 />
                 <text x="74" y="151.5" textAnchor="middle" fontSize="8.5" fontWeight="600" fill="#FFFDF9">
@@ -265,26 +275,20 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Hover indicator on button */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('hover')}
-              >
+              <g {...partProps('hover')}>
                 <circle
                   cx="128"
                   cy="149"
                   r="11.5"
                   fill={partFill('hover', '#FFFDF9')}
                   stroke={partStroke('hover', 'rgba(56, 49, 42, 0.12)')}
-                  strokeWidth="1.6"
+                  strokeWidth="2"
                 />
                 <path d="M125 144L133 149L128.5 150.5L127 155L125 144Z" fill="#544B42" />
               </g>
 
               {/* Section */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('section')}
-              >
+              <g {...partProps('section')}>
                 <rect
                   x="16"
                   y="184"
@@ -293,7 +297,7 @@ export function SiteAnatomyModal({
                   rx="12"
                   fill={partFill('section', '#F6F2EA')}
                   stroke={partStroke('section')}
-                  strokeWidth="2"
+                  strokeWidth="2.2"
                 />
                 <text x="125" y="203" textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#38312A">
                   季節のおしらせ（セクション）
@@ -301,10 +305,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Cards inside Section */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('card')}
-              >
+              <g {...partProps('card')}>
                 {/* Card 1 */}
                 <rect
                   x="26"
@@ -314,7 +315,7 @@ export function SiteAnatomyModal({
                   rx="9"
                   fill={partFill('card', '#FFFDF9')}
                   stroke={partStroke('card', 'rgba(56, 49, 42, 0.06)')}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 <rect x="33" y="220" width="80" height="36" rx="6" fill="#E6EFE7" />
                 <path d="M68 243C68 236 73 232 79 232C79 239 75 243 68 243Z" fill="#7DA083" />
@@ -334,7 +335,7 @@ export function SiteAnatomyModal({
                   rx="9"
                   fill={partFill('card', '#FFFDF9')}
                   stroke={partStroke('card', 'rgba(56, 49, 42, 0.06)')}
-                  strokeWidth="1.8"
+                  strokeWidth="2"
                 />
                 <rect x="137" y="220" width="80" height="36" rx="6" fill="#F5EBE0" />
                 <circle cx="177" cy="238" r="7" fill="#DFAA88" />
@@ -347,10 +348,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Text Link */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('text-link')}
-              >
+              <g {...partProps('text-link')}>
                 <rect
                   x="71"
                   y="307"
@@ -359,7 +357,7 @@ export function SiteAnatomyModal({
                   rx="7"
                   fill={partFill('text-link', 'transparent')}
                   stroke={partStroke('text-link')}
-                  strokeWidth="1.6"
+                  strokeWidth="2"
                 />
                 <text
                   x="125"
@@ -375,10 +373,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Scrollbar indicator */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('scroll')}
-              >
+              <g {...partProps('scroll')}>
                 <rect
                   x="240"
                   y="80"
@@ -387,7 +382,7 @@ export function SiteAnatomyModal({
                   rx="4.5"
                   fill={partFill('scroll', '#F1ECE2')}
                   stroke={partStroke('scroll')}
-                  strokeWidth="1.5"
+                  strokeWidth="1.8"
                 />
                 <rect
                   x="242"
@@ -400,10 +395,7 @@ export function SiteAnatomyModal({
               </g>
 
               {/* Footer */}
-              <g
-                className="anatomy-svg__part"
-                onClick={() => onSelectTerm('footer')}
-              >
+              <g {...partProps('footer')}>
                 <rect
                   x="16"
                   y="348"
@@ -412,7 +404,7 @@ export function SiteAnatomyModal({
                   rx="11"
                   fill={partFill('footer', '#ECE5D8')}
                   stroke={partStroke('footer')}
-                  strokeWidth="2"
+                  strokeWidth="2.2"
                 />
                 <text x="132" y="371" textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#38312A">
                   フッター（住所・営業時間・SNS）
@@ -437,7 +429,7 @@ export function SiteAnatomyModal({
                     role="tab"
                     aria-selected={active}
                     className={`anatomy-term-pill ${active ? 'anatomy-term-pill--active' : ''}`}
-                    onClick={() => onSelectTerm(term.id)}
+                    onClick={() => handleSelect(term.id)}
                   >
                     {term.title}
                   </button>
