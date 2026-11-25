@@ -1,0 +1,515 @@
+:root {
+  /* 紙と暮らしの温もりを感じるアイボリー＆チャコールブラウン */
+  --bg-page: #f6f2ea;
+  --bg-card: #fffdf9;
+  --bg-card-back: #fcf9f2;
+  --bg-subtle: #ede7dc;
+  --bg-subtle-hover: #e4ddd0;
+  --bg-soft-panel: #f4efe5;
+  --bg-browser: #f3efe6;
+  --bg-browser-bar: #eae3d6;
+
+  --text-primary: #38312a;
+  --text-secondary: #6b6258;
+  --text-muted: #978c7f;
+
+  --accent-sage: #5b7b62;
+  --accent-sage-soft: #e6efe7;
+  --accent-sage-hover: #4a6750;
+  --accent-warm: #c87852;
+  --accent-warm-soft: #f9ece4;
+  --accent-warm-hover: #b56843;
+
+  --border-soft: rgba(56, 49, 42, 0.06);
+  --shadow-card: 0 4px 24px rgba(56, 49, 42, 0.038), 0 1px 3px rgba(56, 49, 42, 0.02);
+  --shadow-card-hover: 0 14px 36px rgba(56, 49, 42, 0.072), 0 2px 6px rgba(56, 49, 42, 0.03);
+  --shadow-soft: 0 2px 12px rgba(56, 49, 42, 0.045);
+  --shadow-float: 0 16px 40px rgba(42, 35, 29, 0.16);
+
+  --radius-xl: 24px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+  --radius-pill: 9999px;
+
+  --font-sans: 'Zen Kaku Gothic New', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Shippori Mincho', 'Zen Kaku Gothic New', 'Noto Sans JP', serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-page);
+  background-image: radial-gradient(
+    ellipse 90% 50% at 50% 0%,
+    rgba(255, 253, 249, 0.65) 0%,
+    rgba(246, 242, 234, 0) 100%
+  );
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-feature-settings: 'palt' 1;
+  letter-spacing: 0.02em;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible {
+  outline: 2px solid rgba(91, 123, 98, 0.45);
+  outline-offset: 2px;
+}
+
+/* Keyframes for motion demos */
+@keyframes demoFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes demoCurtainReveal {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(102%);
+  }
+}
+
+@keyframes demoOpeningLogoDraw {
+  from {
+    stroke-dashoffset: 160;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes demoVeilFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes demoBlurCharIn {
+  0% {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes demoCurtainUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-104%);
+  }
+}
+
+@keyframes demoLineLoad {
+  0% {
+    transform: scaleX(0);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes demoSplitUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-104%);
+  }
+}
+
+@keyframes demoSplitDown {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(104%);
+  }
+}
+
+@keyframes demoSplitLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-104%);
+  }
+}
+
+@keyframes demoSplitRight {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(104%);
+  }
+}
+
+@keyframes demoCircleReveal {
+  0% {
+    clip-path: circle(7% at 50% 50%);
+  }
+  100% {
+    clip-path: circle(85% at 50% 50%);
+  }
+}
+
+@keyframes demoZoomReveal {
+  0% {
+    opacity: 0.35;
+    transform: scale(1.24);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes demoLogoScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.86);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes demoStaggerUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes demoCharPop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes demoTypeCursor {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes demoLineDraw {
+  from {
+    stroke-dashoffset: 220;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes demoGentleFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes demoSoftGlow {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes demoAmbientGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes demoSkeletonShimmer {
+  0% {
+    background-position: -180px 0;
+  }
+  100% {
+    background-position: 180px 0;
+  }
+}
+
+@keyframes demoCheckDraw {
+  from {
+    stroke-dashoffset: 48;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes demoRipple {
+  0% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.8);
+    opacity: 0;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes demoInputShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* Text & Line keyframes */
+@keyframes demoMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes demoMaskRise {
+  0% {
+    transform: translateY(108%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes demoLinePath {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes demoFlapFlip {
+  0% {
+    transform: rotateX(-78deg);
+    filter: brightness(0.85);
+  }
+  60% {
+    transform: rotateX(10deg);
+    filter: brightness(1.04);
+  }
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
+/* Atmosphere keyframes */
+@keyframes demoPageCurtainSweep {
+  0% {
+    transform: translateY(104%);
+  }
+  45%,
+  55% {
+    transform: translateY(0%);
+  }
+  100% {
+    transform: translateY(-104%);
+  }
+}
+
+@keyframes demoAuroraDrift1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(26px, -16px) scale(1.16);
+  }
+}
+
+@keyframes demoAuroraDrift2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-24px, 18px) scale(1.14);
+  }
+}
+
+@keyframes demoShineSweep {
+  0% {
+    transform: translateX(-140%) skewX(-24deg);
+  }
+  45%,
+  100% {
+    transform: translateX(260%) skewX(-24deg);
+  }
+}
+
+@keyframes demoPopupStandUp {
+  0% {
+    transform: rotateX(-86deg);
+    opacity: 0.35;
+  }
+  68% {
+    transform: rotateX(11deg);
+    opacity: 1;
+  }
+  84% {
+    transform: rotateX(-4deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes demoFlutedDrift {
+  0%,
+  100% {
+    transform: translateX(-16px) translateY(0);
+  }
+  50% {
+    transform: translateX(18px) translateY(-8px);
+  }
+}
+
+@keyframes demoDappledSway {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  50% {
+    transform: translate(8px, 5px) rotate(4deg) scale(1.04);
+  }
+}
+
+@keyframes demoTopoWave1 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(8px, -4px);
+  }
+}
+
+@keyframes demoTopoWave2 {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-7px, 5px);
+  }
+}

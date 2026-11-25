@@ -1,0 +1,240 @@
+.anatomy-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background-color: rgba(44, 37, 31, 0.38);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  animation: modalFadeIn 0.22s ease;
+}
+
+.anatomy-modal {
+  width: 100%;
+  max-width: 930px;
+  max-height: 90vh;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 24px 64px rgba(38, 32, 27, 0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalSlideUp 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.anatomy-modal__head {
+  padding: 20px 28px;
+  background-color: var(--bg-page);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.anatomy-modal__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-primary);
+}
+
+.anatomy-modal__lead {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.anatomy-modal__close {
+  border: none;
+  background-color: var(--bg-card);
+  color: var(--text-secondary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-soft);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.18s ease;
+}
+
+.anatomy-modal__close:hover {
+  background-color: var(--bg-subtle-hover);
+  color: var(--text-primary);
+}
+
+.anatomy-modal__body {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 26px;
+  padding: 26px 28px 28px;
+  overflow-y: auto;
+}
+
+.anatomy-diagram {
+  background-color: var(--bg-page);
+  border-radius: 20px;
+  padding: 18px 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.anatomy-diagram__hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.anatomy-svg {
+  width: 100%;
+  max-width: 268px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 6px 18px rgba(56, 49, 42, 0.055));
+}
+
+.anatomy-svg__part {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.anatomy-svg__part:hover {
+  opacity: 0.86;
+}
+
+.anatomy-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.anatomy-terms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.anatomy-term-pill {
+  border: none;
+  background-color: var(--bg-soft-panel);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: var(--radius-pill);
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.anatomy-term-pill:hover {
+  background-color: var(--bg-subtle-hover);
+  color: var(--text-primary);
+}
+
+.anatomy-term-pill--active {
+  background-color: var(--accent-sage);
+  color: #fffdf9;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(91, 123, 98, 0.22);
+}
+
+.anatomy-term-pill--active:hover {
+  background-color: var(--accent-sage-hover);
+  color: #fffdf9;
+}
+
+.anatomy-detail {
+  background-color: var(--bg-page);
+  border-radius: 20px;
+  padding: 24px 26px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.anatomy-detail__badge {
+  display: inline-block;
+  align-self: flex-start;
+  background-color: var(--accent-sage-soft);
+  color: var(--accent-sage-hover);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 4px 11px;
+  border-radius: var(--radius-pill);
+}
+
+.anatomy-detail__title {
+  margin: 2px 0 0;
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+.anatomy-detail__subtitle {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent-warm);
+}
+
+.anatomy-detail__desc {
+  margin: 6px 0 4px;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text-primary);
+}
+
+.anatomy-detail__tip {
+  margin-top: auto;
+  background-color: var(--bg-card);
+  border-radius: 14px;
+  padding: 13px 16px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.anatomy-detail__tip-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--accent-sage);
+}
+
+@media (max-width: 780px) {
+  .anatomy-backdrop {
+    padding: 12px;
+  }
+
+  .anatomy-modal__head {
+    padding: 16px 20px;
+  }
+
+  .anatomy-modal__body {
+    grid-template-columns: 1fr;
+    padding: 18px 20px 22px;
+    gap: 18px;
+  }
+
+  .anatomy-svg {
+    max-width: 236px;
+  }
+
+  .anatomy-detail {
+    padding: 20px;
+  }
+}

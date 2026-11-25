@@ -1,0 +1,135 @@
+.devbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background-color: rgba(44, 37, 31, 0.36);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.2s ease;
+}
+
+.devbox-modal {
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 52px rgba(38, 32, 27, 0.16);
+  padding: 24px 26px 26px;
+  animation: modalSlideUp 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.devbox-modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.devbox-modal__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.devbox-modal__icon {
+  color: var(--text-muted);
+}
+
+.devbox-modal__title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-primary);
+}
+
+.devbox-modal__close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--bg-soft-panel);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.devbox-modal__close:hover {
+  background-color: var(--bg-subtle-hover);
+  color: var(--text-primary);
+}
+
+.devbox-modal__notice {
+  margin: 0 0 18px;
+  padding: 13px 15px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-page);
+  color: var(--text-secondary);
+  font-size: 12.5px;
+  line-height: 1.72;
+}
+
+.devbox-modal__control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 15px 16px;
+  border-radius: var(--radius-md);
+  background-color: var(--bg-soft-panel);
+}
+
+.devbox-modal__control-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.devbox-modal__control-label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.devbox-modal__control-hint {
+  font-size: 11.5px;
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+.devbox-switch {
+  position: relative;
+  width: 46px;
+  height: 26px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background-color: #d6cfc3;
+  padding: 3px;
+  flex-shrink: 0;
+  transition: background-color 0.22s ease;
+}
+
+.devbox-switch--on {
+  background-color: var(--accent-sage);
+}
+
+.devbox-switch__thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #fffdf9;
+  box-shadow: 0 1px 4px rgba(56, 49, 42, 0.18);
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.devbox-switch--on .devbox-switch__thumb {
+  transform: translateX(20px);
+}
