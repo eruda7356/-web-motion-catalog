@@ -22,6 +22,7 @@ export function SiteAnatomyModal({
   const toastTimerRef = useRef<number | null>(null);
 
   const [flashTick, setFlashTick] = useState(0);
+  const [detailFocusTick, setDetailFocusTick] = useState(0);
   const [toastTitle, setToastTitle] = useState<string | null>(null);
 
   useEffect(() => {
@@ -44,6 +45,7 @@ export function SiteAnatomyModal({
   useEffect(() => {
     if (!isOpen) return;
     setFlashTick((t) => t + 1);
+    bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
   }, [isOpen, activeTermId]);
 
   useEffect(() => {
@@ -65,11 +67,12 @@ export function SiteAnatomyModal({
     toastTimerRef.current = window.setTimeout(() => {
       setToastTitle(null);
       toastTimerRef.current = null;
-    }, 4500);
+    }, 5500);
   };
 
   const handleSelect = (termId: GlossaryTermId) => {
     const targetTerm = GLOSSARY_TERMS.find((t) => t.id === termId);
+    bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     if (termId === activeTermId) {
       setFlashTick((t) => t + 1);
     } else {
@@ -86,6 +89,7 @@ export function SiteAnatomyModal({
       window.clearTimeout(toastTimerRef.current);
       toastTimerRef.current = null;
     }
+    setDetailFocusTick((t) => t + 1);
 
     const bodyEl = bodyRef.current;
     const detailEl = detailRef.current;
@@ -486,7 +490,11 @@ export function SiteAnatomyModal({
               })}
             </div>
 
-            <div className="anatomy-detail" ref={detailRef}>
+            <div
+              key={`detail-${detailFocusTick}`}
+              className={`anatomy-detail ${detailFocusTick > 0 ? 'anatomy-detail--focus' : ''}`}
+              ref={detailRef}
+            >
               <div className="anatomy-detail__top">
                 <span className="anatomy-detail__badge">場所・言葉の解説</span>
                 <button

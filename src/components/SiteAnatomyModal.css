@@ -200,6 +200,22 @@
   gap: 10px;
 }
 
+.anatomy-detail--focus {
+  animation: anatomyDetailPulse 0.9s ease;
+}
+
+@keyframes anatomyDetailPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(91, 123, 98, 0.32);
+  }
+  45% {
+    box-shadow: 0 0 0 4px rgba(91, 123, 98, 0.18);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(91, 123, 98, 0);
+  }
+}
+
 .anatomy-detail__top {
   display: flex;
   align-items: center;
