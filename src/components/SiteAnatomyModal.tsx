@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { X } from 'lucide-react';
+import { ArrowDown, ArrowUp, X } from 'lucide-react';
 import { GLOSSARY_TERMS } from '../data/glossary';
 import type { GlossaryTermId } from '../types/motion';
 import './SiteAnatomyModal.css';
@@ -18,10 +18,22 @@ export function SiteAnatomyModal({
   onClose,
 }: SiteAnatomyModalProps) {
   const bodyRef = useRef<HTMLDivElement>(null);
+  const detailRef = useRef<HTMLDivElement>(null);
+  const toastTimerRef = useRef<number | null>(null);
+
   const [flashTick, setFlashTick] = useState(0);
+  const [toastTitle, setToastTitle] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen) {
+      setToastTitle(null);
+      if (toastTimerRef.current) {
+        window.clearTimeout(toastTimerRef.current);
+        toastTimerRef.current = null;
+      }
+      return;
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
@@ -29,28 +41,65 @@ export function SiteAnatomyModal({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Scroll modal body smoothly to top & trigger subtle highlight flash whenever modal opens or term changes
   useEffect(() => {
     if (!isOpen) return;
     setFlashTick((t) => t + 1);
-    const bodyEl = bodyRef.current;
-    if (bodyEl && bodyEl.scrollTop > 0) {
-      bodyEl.scrollTo({ top: 0, behavior: 'smooth' });
-    }
   }, [isOpen, activeTermId]);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
   if (!isOpen) return null;
 
   const activeTerm =
     GLOSSARY_TERMS.find((t) => t.id === activeTermId) ?? GLOSSARY_TERMS[0];
 
+  const showSelectionToast = (title: string) => {
+    setToastTitle(title);
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToastTitle(null);
+      toastTimerRef.current = null;
+    }, 4500);
+  };
+
   const handleSelect = (termId: GlossaryTermId) => {
+    const targetTerm = GLOSSARY_TERMS.find((t) => t.id === termId);
     if (termId === activeTermId) {
       setFlashTick((t) => t + 1);
-      bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       onSelectTerm(termId);
     }
+    if (targetTerm) {
+      showSelectionToast(targetTerm.title);
+    }
+  };
+
+  const scrollToDetail = () => {
+    setToastTitle(null);
+    if (toastTimerRef.current) {
+      window.clearTimeout(toastTimerRef.current);
+      toastTimerRef.current = null;
+    }
+
+    const bodyEl = bodyRef.current;
+    const detailEl = detailRef.current;
+    if (!bodyEl || !detailEl) return;
+
+    const bodyRect = bodyEl.getBoundingClientRect();
+    const detailRect = detailEl.getBoundingClientRect();
+    const targetTop = bodyEl.scrollTop + (detailRect.top - bodyRect.top) - 14;
+    bodyEl.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+  };
+
+  const scrollToDiagram = () => {
+    bodyRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    setFlashTick((t) => t + 1);
   };
 
   const isHighlighted = (id: GlossaryTermId) => activeTermId === id;
@@ -82,7 +131,7 @@ export function SiteAnatomyModal({
               サイトの仕組み・場所の名前
             </h2>
             <p className="anatomy-modal__lead">
-              図の中のパーツや、右側の言葉を押すとやさしい説明が見られます。
+              図の中のパーツや、言葉を押すと場所が光ってやさしい説明が見られます。
             </p>
           </div>
           <button
@@ -437,8 +486,18 @@ export function SiteAnatomyModal({
               })}
             </div>
 
-            <div className="anatomy-detail">
-              <span className="anatomy-detail__badge">場所・言葉の解説</span>
+            <div className="anatomy-detail" ref={detailRef}>
+              <div className="anatomy-detail__top">
+                <span className="anatomy-detail__badge">場所・言葉の解説</span>
+                <button
+                  type="button"
+                  className="anatomy-detail__back-btn"
+                  onClick={scrollToDiagram}
+                >
+                  <ArrowUp size={12} />
+                  図解へ戻る
+                </button>
+              </div>
               <h3 className="anatomy-detail__title">{activeTerm.title}</h3>
               <p className="anatomy-detail__subtitle">{activeTerm.subtitle}</p>
               <p className="anatomy-detail__desc">{activeTerm.description}</p>
@@ -449,6 +508,25 @@ export function SiteAnatomyModal({
             </div>
           </div>
         </div>
+
+        {/* Selection Toast with quick jump to explanation */}
+        {toastTitle && (
+          <div className="anatomy-toast-wrap" role="status" aria-live="polite">
+            <div className="anatomy-toast">
+              <span className="anatomy-toast__text">
+                「{toastTitle}」を選択しました
+              </span>
+              <button
+                type="button"
+                className="anatomy-toast__btn"
+                onClick={scrollToDetail}
+              >
+                解説を見る
+                <ArrowDown size={12} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
